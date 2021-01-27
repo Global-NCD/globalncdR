@@ -47,7 +47,7 @@ print(max(tab2$ub, na.rm = T) + (abs(max(tab2$ub, na.rm = T))/5))
     scale_x_continuous("\n Between-arm difference",
                        expand = c(0,0))+
     coord_cartesian(xlim=c(min(tab2$lb, na.rm = T) - (abs(min(tab2$lb, na.rm = T))/5),
-                           max(tab2$ub, na.rm = T) + (abs(max(tab2$ub, na.rm = T))/1)))+
+                           max(tab2$ub, na.rm = T) + (abs(max(tab2$ub, na.rm = T))/0.8)))+
     geom_vline(xintercept = 0, linetype=2)+
     theme_bw()+
     ggtitle(title)+
