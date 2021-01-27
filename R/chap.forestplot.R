@@ -33,11 +33,7 @@ if(i %in% tab$y){tab2 = rbind(tab2, tab[tab$y == i,])}
 }
 tab2$y = y.lab
 tab2$y = factor(tab2$y, levels = rev(tab2$y))
-
 tab2$face = ifelse(tab2$y %in% y.headings, "bold", "plain")
-
-print(min(tab2$lb, na.rm = T) - (abs(min(tab2$lb, na.rm = T))/5))
-print(max(tab2$ub, na.rm = T) + (abs(max(tab2$ub, na.rm = T))/5))
 
   p = ggplot(data=tab2,
              aes(x=between,
