@@ -1,11 +1,5 @@
 
-chap.forestplot = function(datalist = c("data1", "data2", "data3", "data4", "data5", "data6"),
-                           var = "healthstate_eq5d",
-                           y.lab = c("Age", " >= 50 y", "< 50 y",
-                                     "Owns LPG", "Yes", "No",
-                                     "SBP", ">= 120mm Hg", "< 120mm Hg"),
-                           y.headings = c("Age", "Owns LPG", "SBP"),
-                           title = "", ...){
+chap.forestplot = function(datalist, var, y.lab, y.headings, title = "", ...){
 
   if (!("ggplot2" %in% rownames(installed.packages()))) {
     message("Please install package ggplot2")
