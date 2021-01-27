@@ -77,13 +77,13 @@ tab2$face = ifelse(tab2$y %in% y.headings, "bold", "plain")
 # data6 = dat %>% filter(visit > 0 & sbp <= 120)
 
 # tiff('CHAP_Healthstate_EQ5D.tiff', units="in", width=10, height=8, res=100, compression = 'lzw')
-chap.forestplot(datalist = c("data1", "data2", "data3", "data4", "data5", "data6"),
-                var = "healthstate_eq5d",
-                y.lab = c("Age", " >= 50 y", "< 50 y",
-                          "Owns LPG", "Yes", "No",
-                          "SBP", ">= 120mm Hg", "< 120mm Hg"),
-                y.headings = c("Age", "Owns LPG", "SBP"),
-                title = "Healthstate EQ5D")
+# chap.forestplot(datalist = c("data1", "data2", "data3", "data4", "data5", "data6"),
+#                 var = "healthstate_eq5d",
+#                 y.lab = c("Age", " >= 50 y", "< 50 y",
+#                           "Owns LPG", "Yes", "No",
+#                           "SBP", ">= 120mm Hg", "< 120mm Hg"),
+#                 y.headings = c("Age", "Owns LPG", "SBP"),
+#                 title = "Healthstate EQ5D")
 # dev.off()
 
 
