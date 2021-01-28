@@ -1,8 +1,5 @@
 
-exposure.plot = function(data = "dat",
-                         var = "total_eq5d",
-                         exposure = "pm_kit",
-                         y.lab = "EQ5D: Total"){
+exposure.plot = function(data, var, exposure , y.lab){
 
 x.lab = expression(paste("Kitchen ",PM[2.5]," (",mu,g/m^3,")"))
 
