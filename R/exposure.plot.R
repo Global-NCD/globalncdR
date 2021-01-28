@@ -1,8 +1,6 @@
 
-exposure.plot = function(data, var, exposure , y.lab){
-
-x.lab = expression(paste("Kitchen ",PM[2.5]," (",mu,g/m^3,")"))
-
+exposure.plot = function(data, var, exposure , y.lab, x.lab){
+            
 frm = as.formula(paste0(var,"~", "s(",exposure,")","+ s(age_rand) + s(id,bs='re') +
             bmi + s(season) + chimney + lpg + fise + pigs + dogs + incomecat + yearseduc + sleep"))
 
