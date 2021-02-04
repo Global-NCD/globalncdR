@@ -1,7 +1,7 @@
 exposure.plot = function(data, var, exposure , y.lab, x.lab, trimmed){
 
   frm = as.formula(paste0(var,"~", "s(",exposure,")","+ s(age_rand) + s(id,bs='re') +
-            bmi + s(season) + chimney + lpg + fise + pigs + dogs + incomecat + yearseduc + sleep"))
+            bmi + chimney + lpg + fise + pigs + dogs + incomecat + yearseduc + sleep"))
   
   model = gam(frm, data = eval(parse(text = data)), method = "REML", na.action = na.exclude)
   a1 = plot_smooth(model, view = exposure, rm.ranef=T)
