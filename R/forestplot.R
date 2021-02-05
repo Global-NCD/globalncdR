@@ -51,10 +51,6 @@ forestplot = function(datalist = datalist,
                    sprintf(paste0("%3.",round,"f"),tab[[2]]), " to ",
                    sprintf(paste0("%3.",round,"f"),tab[[3]],1),")")
 
-if(n.lab == "TRUE" | n.lab == "T"){
-tab$y = paste0(tab$y, " (", tab[[4]], ")")
-}
-
   tab2 = NULL
   for(i in c(1:length(y.lab))){
     if(y.lab[i] %in% sectionhead){
@@ -70,6 +66,13 @@ tab$y = paste0(tab$y, " (", tab[[4]], ")")
   tab2$serial = factor(tab2$serial, levels = tab2$serial[order(tab2$serial)])
   tab2$face = ifelse(tab2$y %in% sectionhead, "bold", "plain")
   tab2$lab = replace(tab2$lab, is.na(tab2$lab), "")
+
+  if(n.lab == "TRUE" | n.lab == "T"){
+zz = paste0(tab2$y, " (n = ", tab2[[4]], ")")
+zz = gsub("\\(n = NA)", "", zz)
+tab2$y <- zz
+  }
+print(tab2)
 
   p =
     ggplot(data = tab2)
