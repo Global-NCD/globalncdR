@@ -72,7 +72,6 @@ zz = paste0(tab2$y, " (n = ", tab2[[4]], ")")
 zz = gsub("\\(n = NA)", "", zz)
 tab2$y <- zz
   }
-print(tab2)
 
   p =
     ggplot(data = tab2)
