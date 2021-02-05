@@ -15,10 +15,17 @@ forestplot = function(datalist = datalist,
                       x.break = 10,
                       xcoord.min = -50,
                       xcoord.max = 140,
+                      x.title = "",
+                      y.title = "",
+                      point.size = 6,
+                      relative.size = TRUE,
                       lab.size = 16,
                       lab.hjust = 1.1,
                       vline.x = 0,
-                      vline.type = "dashed"){
+                      vline.type = "dashed",
+                      vline.size = 1,
+                      slash.gap = 2,
+                      shade.var = c(1, 5, 7)){
   frm <- as.formula(frm)
 
   if(deparse(substitute(stat)) == "clogit"){
@@ -26,7 +33,8 @@ forestplot = function(datalist = datalist,
     for(i in datalist){
       coef = coef(stat(frm, data = i))[1]
       conf = confint(stat(frm, data = i))[1,]
-      tab = rbind(tab, c(coef, conf))
+      n = stat(frm, data = i)$n[1]
+      tab = rbind(tab, c(coef, conf, n))
     }
   }
   tab = data.frame(tab)
@@ -35,7 +43,7 @@ forestplot = function(datalist = datalist,
   if(exp == "TRUE" | exp == "T"){tab[,c(1:3)] = exp(tab[,c(1:3)])}
   if(rev == "TRUE" | rev == "T"){
     tab[,c(1:3)] <- (1- tab[,c(1:3)])
-    tab <- tab[,c(1, 3, 2)]
+    tab <- tab[,c(1, 3, 2, 4)]
   }
   if(perc == "TRUE" | perc == "T"){tab[,c(1:3)] = tab[,c(1:3)]*100}
   tab$lab = paste0(sprintf(paste0("%3.",round,"f"),tab[[1]],1)," (",
@@ -59,16 +67,31 @@ forestplot = function(datalist = datalist,
   tab2$lab = replace(tab2$lab, is.na(tab2$lab), "")
 
   p =
-    ggplot(data = tab2) +
-    geom_point(aes(x = tab2[[1]], y = tab2[[6]]), shape=23, fill="black", size = 6) +
-    geom_errorbar(aes(xmin = tab2[[2]], xmax = tab2[[3]], y = tab2[[6]]), width = errorbar.width, size = errorbar.size) +
-    scale_x_continuous("", breaks = seq(x.min, x.max, x.break)) +
-    scale_y_discrete("", label = rev(tab2[[5]])) +
+    ggplot(data = tab2)
+
+  if(relative.size == "TRUE" | relative.size == "T"){
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = tab2[[4]]*(point.size/3)), shape=23, fill="black")
+  }
+
+  if(relative.size != "TRUE" & relative.size != "T"){
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]]), shape=23, fill="black", size = point.size)
+  }
+
+  p = p +
+    geom_errorbar(aes(xmin = tab2[[2]], xmax = tab2[[3]], y = tab2[[7]]), width = errorbar.width, size = errorbar.size) +
+    scale_x_continuous(x.title, breaks = seq(x.min, x.max, x.break)) +
+    scale_y_discrete(y.title, label = rev(tab2[[6]])) +
     coord_cartesian(xlim=c(xcoord.min, xcoord.max)) +
-    geom_vline(x = vline.x, type = vline.type) +
+    geom_vline(xintercept = vline.x, linetype = vline.type, size = vline.size) +
     theme_bw()+
     ggtitle(title)+
-    annotate("text", x = Inf, y = tab2[[6]], label =tab2[[4]], hjust = lab.hjust, size = lab.size) +
+    annotate("text", x = Inf, y = tab2[[7]], label =tab2[[5]], hjust = lab.hjust, size = lab.size)
+
+  for(i in shade.var){
+    p = p +
+      annotate("rect", xmin = -Inf, xmax = Inf, ymin = (nrow(tab2)-i+ 0.4), ymax = (nrow(tab2)-i+ 1.4), alpha = 0.2)
+  }
+  p = p +
     theme(axis.ticks = element_blank(),
           panel.grid = element_blank(),
           plot.title = element_text(hjust=0.5,size=27),
@@ -76,6 +99,17 @@ forestplot = function(datalist = datalist,
           axis.title = element_text(size=22),
           axis.text.y = element_text(face = rev(tab2$face)),
           legend.position = "none")
+
+  for(i in tab2$serial){
+    tab2$xstart[tab2$serial == i] = ifelse(tab2[[2]][tab2$serial == i] < x.min, x.min+4, 0)
+    tab2$xend[tab2$serial == i] = ifelse(tab2[[2]][tab2$serial == i] < x.min, x.min+1, 0)
+    tab2$ystart[tab2$serial == i] = ifelse(tab2[[2]][tab2$serial == i] < x.min, as.numeric(i)+0.25, 0)
+    tab2$yend[tab2$serial == i] = ifelse(tab2[[2]][tab2$serial == i] < x.min, as.numeric(i)-0.25, 0)
+  }
+
+  p = p +
+    geom_segment(aes(x = tab2$xstart, xend = tab2$xend , y = tab2$ystart, yend = tab2$yend),color="steelblue") +
+    geom_segment(aes(x = tab2$xstart + slash.gap, xend = tab2$xend + slash.gap , y = tab2$ystart, yend = tab2$yend),color="steelblue")
 
   return(list(tab2, p))
 }
