@@ -25,6 +25,7 @@ forestplot = function(datalist = datalist,
                       vline.type = "dashed",
                       vline.size = 1,
                       slash.gap = 2,
+                      n.lab = TRUE,
                       shade.var = c(1, 5, 7)){
   frm <- as.formula(frm)
 
@@ -49,6 +50,10 @@ forestplot = function(datalist = datalist,
   tab$lab = paste0(sprintf(paste0("%3.",round,"f"),tab[[1]],1)," (",
                    sprintf(paste0("%3.",round,"f"),tab[[2]]), " to ",
                    sprintf(paste0("%3.",round,"f"),tab[[3]],1),")")
+
+if(n.lab == "TRUE" | n.lab == "T"){
+tab$y = paste0(tab$y, " (", tab[[4]], ")")
+}
 
   tab2 = NULL
   for(i in c(1:length(y.lab))){
