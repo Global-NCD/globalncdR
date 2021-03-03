@@ -86,7 +86,7 @@ tab2$y <- zz
 
   p = p +
     geom_errorbar(aes(xmin = tab2[[2]], xmax = tab2[[3]], y = tab2[[7]]), width = errorbar.width, size = errorbar.size) +
-    scale_x_continuous(x.title, breaks = seq(x.min, x.max, x.break)) +
+    scale_x_continuous(x.title, breaks = seq(x.min, x.max, x.break), expand = c(0,0)) +
     scale_y_discrete(y.title, label = rev(tab2[[6]])) +
     coord_cartesian(xlim=c(xcoord.min, xcoord.max)) +
     geom_vline(xintercept = vline.x, linetype = vline.type, size = vline.size) +
