@@ -77,7 +77,7 @@ tab2$y <- zz
     ggplot(data = tab2)
 
   if(relative.size == "TRUE" | relative.size == "T"){
-    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = (tab2[[4]]/min(tab[[4]], na.rm = T)*2)),  shape=23, fill="black")
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = tab2[[4]]*(point.size/3)),  shape=23, fill="black")
   }
 
   if(relative.size != "TRUE" & relative.size != "T"){
