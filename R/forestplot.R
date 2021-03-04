@@ -18,6 +18,7 @@ forestplot = function(datalist = datalist,
                       x.title = "",
                       y.title = "",
                       point.size = 6,
+                      point.ratio = 1,
                       relative.size = TRUE,
                       lab.size = 16,
                       lab.hjust = 1.1,
@@ -77,7 +78,11 @@ tab2$y <- zz
     ggplot(data = tab2)
 
   if(relative.size == "TRUE" | relative.size == "T"){
-    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = (tab2[[4]]/min(tab[[4]], na.rm = T)*2)),  shape=23, fill="black")
+<<<<<<< HEAD
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = ((tab[[4]]/min(tab[[4]])/point.ratio, na.rm = TRUE))*point.size,  shape=23, fill="black")
+=======
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = tab2[[4]]*(point.size/2)),  shape=23, fill="black")
+>>>>>>> 44f48f8bce79f402de22a4ad10e7eb58696e24a2
   }
 
   if(relative.size != "TRUE" & relative.size != "T"){
