@@ -23,6 +23,7 @@ forestplot = function(datalist = datalist,
                       relative.size = TRUE,
                       lab.size = 16,
                       lab.hjust = 1.1,
+                      corner.title = TRUE,
                       vline.x = 0,
                       vline.type = "dashed",
                       vline.size = 1,
@@ -109,6 +110,11 @@ tab2$y <- zz
           axis.title = element_text(size=22),
           axis.text.y = element_text(face = rev(tab2$face)),
           legend.position = "none")
+  if(corner.title == "T" | corner.title == "TRUE"){
+    p = p +
+      theme(plot.title = element_text(hjust = 0.04, vjust = -8, size=27))
+  }
+
 
   for(i in tab2$serial){
     tab2$xstart[tab2$serial == i] = ifelse(tab2[[2]][tab2$serial == i] < x.min, x.min+4, 0)
