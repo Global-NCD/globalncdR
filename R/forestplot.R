@@ -18,6 +18,8 @@ forestplot = function(datalist = datalist,
                       x.title = "",
                       y.title = "",
                       point.size = 6,
+                      min.point.size = 5,
+                      max.point.size = 10,
                       relative.size = TRUE,
                       lab.size = 16,
                       lab.hjust = 1.1,
@@ -77,7 +79,7 @@ tab2$y <- zz
     ggplot(data = tab2)
 
   if(relative.size == "TRUE" | relative.size == "T"){
-    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = sqrt(tab2[[4]])),  shape=23, fill="black")
+    p = p + geom_point(aes(x = tab2[[1]], y = tab2[[7]], size = tab2[[4]]),  shape=23, fill="black")
   }
 
   if(relative.size != "TRUE" & relative.size != "T"){
@@ -89,6 +91,7 @@ tab2$y <- zz
     scale_x_continuous(x.title, breaks = seq(x.min, x.max, x.break), expand = c(0,0)) +
     scale_y_discrete(y.title, label = rev(tab2[[6]])) +
     coord_cartesian(xlim=c(xcoord.min, xcoord.max)) +
+    scale_size(range = c(min.point.size, max.point.size)) +
     geom_vline(xintercept = vline.x, linetype = vline.type, size = vline.size) +
     theme_bw()+
     ggtitle(title)+
