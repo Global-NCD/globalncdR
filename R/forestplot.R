@@ -100,7 +100,7 @@ tab2$y <- zz
 
   for(i in shade.var){
     p = p +
-      annotate("rect", xmin = -Inf, xmax = Inf, ymin = (nrow(tab2)-i+ 0.4), ymax = (nrow(tab2)-i+ 1.4), alpha = 0.2)
+      annotate("rect", xmin = -Inf, xmax = Inf, ymin = (nrow(tab2)-i+ 0.5), ymax = (nrow(tab2)-i+ 1.4), alpha = 0.2)
   }
   p = p +
     theme(axis.ticks = element_blank(),
