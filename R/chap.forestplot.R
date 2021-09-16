@@ -1,5 +1,13 @@
 
-chap.forestplot = function(datalist, var, y.lab, y.headings, title = "", ...){
+datalist = datalist
+var = "healthstate_eq5d"
+y.lab = y.lab
+y.headings = y.headings
+title = "EQ5D: Healthstate"
+maindata = dat
+
+
+chap.forestplot = function(datalist, var, y.lab, y.headings, title = "", maindata, ...){
 
   if (!("ggplot2" %in% rownames(installed.packages()))) {
     message("Please install package ggplot2")
@@ -18,12 +26,49 @@ for(i in datalist) {
   tab = rbind(tab, yy)
 }
 
+#assign(dt, eval(parse(text = maindata)))
+
+frm.age = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(age_rand>=50,1,0)"))
+mod.age = lme(frm.age, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.lpg = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(lpg == 1,1,0)"))
+mod.lpg = lme(frm.lpg, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.sbp = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(sbp >= 100,1,0)"))
+mod.sbp = lme(frm.sbp, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.cooktime = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(totalcook_avgmins >= 190,1,0)"))
+mod.cooktime = lme(frm.cooktime, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.svcooktime = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(cooktime_avgyr1 >= 180,1,0)"))
+mod.svcooktime = lme(frm.svcooktime, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.edu = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(yofeduc_bsc > 5,1,0)"))
+mod.edu = lme(frm.edu, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+frm.occupation = as.formula(paste0(var, "~ factor(visit) + arm*ifelse(employment == 'Farmer' | employment == 'Laborer',1,0)"))
+mod.occupation = lme(frm.occupation, random=~1|id, eval(parse(text = maindata)), na.action=na.exclude, subset=visit>0)
+
+a = nrow(summary(mod.age)$tTable)
+b = ncol(summary(mod.age)$tTable)
+
+p.list = sprintf("%3.2f",c(summary(mod.age)$tTable[a,b],
+                           summary(mod.lpg)$tTable[a,b],
+                           summary(mod.sbp)$tTable[a,b],
+                           summary(mod.cooktime)$tTable[a,b],
+                           summary(mod.svcooktime)$tTable[a,b],
+                           summary(mod.edu)$tTable[a,b],
+                           summary(mod.occupation)$tTable[a,b]))
+
+#y.headings <- paste0(y.headings, " (p=", p.list, ")")
+
   colnames(tab) = c("between", "lb","ub", "p")
   tab = data.frame(tab)
   tab$y = y.lab[!(y.lab %in% y.headings)]
   tab$label = paste0(sprintf("%3.2f",tab$between,1)," (",
                      sprintf("%3.2f",tab$lb,1), " to ",
                      sprintf("%3.2f",tab$ub,1),")")
+
 
 tab2 = NULL
 for(i in y.lab){
@@ -32,8 +77,16 @@ if(!i %in% tab$y){tab2 = rbind(tab2, rep(NA, ncol(tab)))
 if(i %in% tab$y){tab2 = rbind(tab2, tab[tab$y == i,])}
 }
 tab2$y = y.lab
+
+list1 = c(1, 4, 7, 10, 13, 16, 19)
+
+for(i in 1:7){
+  tab2$y[list1[i]] <- paste0(tab2$y[list1[i]], " (p=", p.list[i], ")")
+}
+
 tab2$y = factor(tab2$y, levels = rev(tab2$y))
 tab2$face = ifelse(tab2$y %in% y.headings, "bold", "plain")
+
 
   p = ggplot(data=tab2,
              aes(x=between,
