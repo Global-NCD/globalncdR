@@ -11,23 +11,18 @@ dat$exposure = dat[[exposure]]
 x.min = min(dat$exposure, na.rm = T)
 x.max = quantile(dat$exposure,0.95,na.rm=T)
 
-
 p =
   ggplot () +
   geom_line(aes(x = a1$fv[[exposure]], y = a1$fv$fit),linetype=1) +
   geom_line(aes(x = a1$fv[[exposure]], y = a1$fv$ul),linetype="longdash") +
   geom_line(aes(x = a1$fv[[exposure]], y = a1$fv$ll),linetype="longdash") +
   theme_bw() +
-  scale_y_continuous(y.lab, limits = c(y.min, y.max))
-if(trimmed == 1){
-  p = p +
-    scale_x_continuous(x.lab, limits = c(x.min, x.max)) +
-    geom_rug(aes(x = dat$exposure[dat$exposure < quantile(dat$exposure, 0.945, na.rm=T)]),sides="b")
-    }
-if(trimmed != 1){
-  p = p +
-    scale_x_continuous(x.lab) +
-    geom_rug(aes(x = dat[[exposure]]),sides="b")}
+  theme(axis.title = element_text(size = 21),
+        axis.text = element_text(size = 18)) +
+  scale_y_continuous(y.lab, limits = c(y.min, y.max)) +
+    geom_rug(aes(x = dat$exposure[dat$exposure < quantile(dat$exposure, 0.945, na.rm=T)]),sides="b") +
+  scale_x_continuous(x.lab, limits = c(x.min, x.max))
+
 return(p)
 }
 
