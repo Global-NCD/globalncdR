@@ -1,3 +1,5 @@
+
+
 exposure.plot = function(dat, var, exposure, y.min, y.max, y.lab, x.lab, trimmed){
 
   frm = as.formula(paste0(var,"~", "s(",exposure,")","+ s(age_rand) + s(id,bs='re') +
