@@ -7,7 +7,7 @@
 # maindata = dat
 
 
-chap.forestplot = function(datalist, var, y.lab, y.headings, title = "", maindata, ...){
+chap.forestplot = function(datalist, var, y.lab, y.headings, title = "", ann.lab = NULL, maindata, ...){
 
   if (!("ggplot2" %in% rownames(installed.packages()))) {
     message("Please install package ggplot2")
@@ -110,7 +110,8 @@ tab2$face = ifelse(tab2$y %in% y.headings, "bold", "plain")
           axis.text = element_text(size = 14),
           axis.text.y = element_text(face = rev(tab2$face)),
           axis.title = element_text(size = 16),
-          axis.title.y = element_blank())
+          axis.title.y = element_blank()) +
+    annotate("text", x = -Inf, y = Inf, hjust = -0.5, vjust = 1.3, label = ann.lab, size = 10)
 
   return(p)
 }
